@@ -150,41 +150,23 @@
 <!-- ════════════ HEADER ════════════ -->
 <div class="header">
   <div class="header-left">
-    <!-- PocketHome Logo (SVG recreation) -->
-    <svg width="58" height="58" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer house frame: thick house outline -->
-      <!-- Left wall -->
-      <polygon points="8,48 8,94 28,94 28,55" fill="#3333EE"/>
-      <!-- Right wall -->
-      <polygon points="92,48 92,94 72,94 72,55" fill="#3333EE"/>
-      <!-- Bottom bar -->
-      <rect x="8" y="78" width="84" height="16" fill="#3333EE"/>
-      <!-- Roof: two thick diagonal arms meeting at apex -->
-      <polygon points="50,4 92,44 78,44 50,20 22,44 8,44" fill="#3333EE"/>
-      <!-- Inner cutout to form house "frame" -->
-      <polygon points="50,21 78,46 78,78 22,78 22,46" fill="white"/>
-      <!-- P letterform inside -->
-      <!-- P stem -->
-      <rect x="30" y="50" width="11" height="28" fill="#3333EE"/>
-      <!-- P top bar -->
-      <rect x="30" y="50" width="26" height="9" fill="#3333EE"/>
-      <!-- P middle bar -->
-      <rect x="30" y="64" width="26" height="9" fill="#3333EE"/>
-      <!-- P right side -->
-      <rect x="51" y="50" width="5" height="23" fill="#3333EE"/>
-      <!-- Small house/window inside P bowl -->
-      <polygon points="43,54 50,58 50,63 36,63 36,58" fill="white"/>
-      <polygon points="43,50 50,55 36,55" fill="white"/>
+    <!-- PocketHome Logo -->
+    <svg viewBox="0 0 290 64" width="290" height="64" xmlns="http://www.w3.org/2000/svg">
+      <!-- House icon -->
+      <path d="M30,3 L57,23 L57,58 L3,58 L3,23 Z" fill="#3B52E8"/>
+      <!-- P white: stem -->
+      <rect x="11" y="30" width="11" height="24" fill="white"/>
+      <!-- P white: bowl outer (rect + rounded right cap) -->
+      <path d="M11,30 L40,30 A12,12 0 0 1 40,50 L11,50 Z" fill="white"/>
+      <!-- P blue inner: bowl cutout -->
+      <path d="M22,34 L36,34 A7,7 0 0 1 36,46 L22,46 Z" fill="#3B52E8"/>
+      <!-- "Pocket Home" text -->
+      <text x="72" y="44" font-family="'Segoe UI Black','Arial Black',Arial,sans-serif" font-weight="900" font-size="28" fill="#111">Pocket Home</text>
     </svg>
-    <div>
-      <div class="company-name">PocketHome</div>
-      <div class="company-sub">Έντυπο παραγγελίας για: <strong>Realis Real Estate Investments IKE</strong></div>
-    </div>
   </div>
   <div class="header-right">
     <div class="doc-title">Έντυπο Παραγγελίας Επίπλων</div>
-    <div class="doc-meta">Πελάτης: <strong>Realis Real Estate Investments IKE</strong></div>
-    <div class="doc-meta" style="margin-top:2px">Προμηθευτής: <strong>Dromeas</strong> &nbsp;|&nbsp; <span id="doc-date"></span></div>
+    <div class="doc-meta" style="margin-top:2px"><span id="doc-date"></span></div>
     <div class="doc-meta" style="margin-top:2px">Κωδ. Προσφοράς: ΠΡΦ-ΘΚ-19988 / 19989</div>
     <button class="btn-print" onclick="window.print()">🖨 Εκτύπωση</button>
   </div>
@@ -294,7 +276,7 @@
 </div>
 
 <div class="footer">
-  PocketHome &nbsp;|&nbsp; Έντυπο παραγγελίας για Realis Real Estate Investments IKE &nbsp;|&nbsp; Προμηθευτής: Dromeas – www.dromeas.gr
+  PocketHome &nbsp;|&nbsp; Έντυπο Παραγγελίας Επίπλων &nbsp;|&nbsp; Κωδ. Προσφοράς: ΠΡΦ-ΘΚ-19988 / 19989
 </div>
 
 <script>
@@ -303,35 +285,35 @@ const PRODUCTS = [
   { id:1, code:'634-072-607',
     name:'Γραφείο NEO Τριάδα 140×80cm', tag:'140cm',
     desc:'4200×800×730H, Μελαμίνη Υπόλευκο, Μέταλλο Υπόλευκο',
-    price:440.00, disc:25 },
+    price:440.00, disc:0 },
   { id:2, code:'634-073-607',
     name:'Γραφείο NEO Τριάδα 120×80cm', tag:'120cm',
     desc:'3600×800×730H, Μελαμίνη Υπόλευκο, Μέταλλο Υπόλευκο',
-    price:403.00, disc:25 },
+    price:403.00, disc:0 },
   { id:3, code:'ACGR-M040-011-AN1-00',
     name:'Ορθογώνια Ροζέτα Αλουμινίου', tag:'',
     desc:'Διάσταση 400×110mm, Χρώμα Φυσική Ανοδίωση',
-    price:36.00, disc:25 },
+    price:36.00, disc:0 },
   { id:4, code:'ACCT-ALL-14-00-F06-00',
     name:'Αρθρωτό Κανάλι Καλωδίων 140cm', tag:'140cm',
     desc:'Μήκος 1400/1000×140mm, Χρώμα Μέταλλο Υπόλευκο',
-    price:26.00, disc:25 },
+    price:26.00, disc:0 },
   { id:5, code:'ACCT-ALL-12-00-F06-00',
     name:'Αρθρωτό Κανάλι Καλωδίων 120cm', tag:'120cm',
     desc:'Μήκος 1200/800×140mm, Χρώμα Μέταλλο Υπόλευκο',
-    price:24.00, disc:25 },
+    price:24.00, disc:0 },
   { id:6, code:'TETR-FPW-NEO0-125-035-305-00',
     name:'TETRA Διαχωριστικό 140cm', tag:'140cm',
     desc:'Μπροστινό Επικαθήμενο, 1255×350×30mm, Ύφασμα Τύπος 3',
-    price:78.00, disc:25 },
+    price:78.00, disc:0 },
   { id:7, code:'TETR-FPW-NEO0-105-035-305-00',
     name:'TETRA Διαχωριστικό 120cm', tag:'120cm',
     desc:'Μπροστινό Επικαθήμενο, 1055×350×30mm, Ύφασμα Τύπος 3',
-    price:72.00, disc:25 },
+    price:72.00, disc:0 },
   { id:8, code:'ACMR-P03-00',
     name:'Μαγνητικός Δακτύλιος Καλωδίων', tag:'',
     desc:'Χρώμα Υπόλευκο',
-    price:7.00, disc:25 },
+    price:7.00, disc:0 },
 ];
 
 // ── Helpers ────────────────────────────────────────────────────
@@ -427,29 +409,34 @@ function updateLeasing() {
     return;
   }
 
+  let financedPrincipal = principal;
   if (leasingType === 'finance') {
+    financedPrincipal = principal * 1.15;        // +15% markup for finance lease with asset transfer
     bar.style.background = 'linear-gradient(135deg,#2222cc,#4455ff)';
-    document.getElementById('r-mode').textContent = 'Χρηματοδοτική μίσθωση με μεταβίβαση παγίου';
+    document.getElementById('r-mode').textContent = 'Χρηματοδοτική μίσθωση με μεταβίβαση παγίου (+15%)';
   } else {
     bar.style.background = 'linear-gradient(135deg,#b84a00,#e67e22)';
     document.getElementById('r-mode').textContent = 'Λειτουργική μίσθωση χωρίς μεταβίβαση παγίου';
   }
 
   let monthly = 0, totalCost = 0, interest = 0;
-  if (principal > 0) {
+  if (financedPrincipal > 0) {
     const r = 0.10 / 12;                        // monthly rate
     if (months === 1) {
-      monthly = principal * (1 + r);
+      monthly = financedPrincipal * (1 + r);
     } else {
-      monthly = principal * r * Math.pow(1+r, months) / (Math.pow(1+r, months) - 1);
+      monthly = financedPrincipal * r * Math.pow(1+r, months) / (Math.pow(1+r, months) - 1);
     }
     totalCost = monthly * months;
-    interest  = totalCost - principal;
+    interest  = totalCost - financedPrincipal;
   }
 
   document.getElementById('r-monthly').textContent   = fmt(monthly);
   document.getElementById('r-total-cost').textContent= fmt(totalCost);
-  document.getElementById('r-interest').textContent  = 'Τόκοι: ' + fmt(interest) + '  |  Επιτόκιο 10% ετήσιο';
+  const interestLabel = leasingType === 'finance'
+    ? 'Κεφάλαιο (+15%): ' + fmt(financedPrincipal) + '  |  Τόκοι: ' + fmt(interest) + '  |  Επιτόκιο 10% ετήσιο'
+    : 'Τόκοι: ' + fmt(interest) + '  |  Επιτόκιο 10% ετήσιο';
+  document.getElementById('r-interest').textContent  = interestLabel;
 }
 
 // ── Init ───────────────────────────────────────────────────────
@@ -461,3 +448,4 @@ recalc();
 </script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
