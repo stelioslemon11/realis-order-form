@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PocketHome – Έντυπο Παραγγελίας Επίπλων</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f8; color: #222; font-size: 14px; }
+
+    /* ── Header ── */
+    .header {
+      background: white;
+      padding: 20px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 4px solid #3333EE;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+    }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .company-name { font-size: 26px; font-weight: 800; color: #3333EE; letter-spacing: 1px; }
+    .company-sub  { font-size: 11px; color: #888; margin-top: 2px; }
+    .header-right { text-align: right; }
+    .doc-title { font-size: 18px; font-weight: 700; color: #222; margin-bottom: 4px; }
+    .doc-meta  { font-size: 12px; color: #666; }
+    .btn-print {
+      margin-top: 10px;
+      background: #3333EE; color: white;
+      border: none; padding: 8px 20px; border-radius: 7px;
+      cursor: pointer; font-size: 13px; font-weight: 600;
+    }
+    .btn-print:hover { background: #2020cc; }
+
+    /* ── Container ── */
+    .container { max-width: 1140px; margin: 28px auto; padding: 0 18px; }
+
+    /* ── Cards ── */
+    .card {
+      background: white; border-radius: 12px;
+      padding: 26px 28px; margin-bottom: 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .card-title {
+      font-size: 15px; font-weight: 700; color: #3333EE;
+      margin-bottom: 18px; padding-bottom: 10px;
+      border-bottom: 2px solid #eef;
+    }
+
+    /* ── Products Table ── */
+    .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tbl th {
+      background: #3333EE; color: white;
+      padding: 10px 11px; text-align: center; font-weight: 600;
+      white-space: nowrap;
+    }
+    .tbl th:first-child { text-align: left; border-radius: 7px 0 0 0; }
+    .tbl th:last-child  { border-radius: 0 7px 0 0; }
+    .tbl td { padding: 9px 11px; border-bottom: 1px solid #eee; vertical-align: middle; text-align: center; }
+    .tbl td:first-child { text-align: left; }
+    .tbl tr.zero td { opacity: .38; }
+    .tbl tr:not(.zero):hover { background: #f7f7ff; }
+
+    .pname { font-weight: 600; color: #1a1a2e; }
+    .pcode { font-size: 10.5px; color: #999; font-family: monospace; margin-top: 2px; }
+    .pdesc { font-size: 11px; color: #777; margin-top: 2px; }
+
+    .tag {
+      display: inline-block; background: #eef; color: #3333EE;
+      font-size: 10px; padding: 1px 6px; border-radius: 4px;
+      margin-left: 5px; font-weight: 700; vertical-align: middle;
+    }
+
+    input.qty {
+      width: 68px; padding: 5px 7px; border: 1.5px solid #ccd;
+      border-radius: 6px; text-align: center; font-size: 13px;
+    }
+    input.qty:focus { outline: none; border-color: #3333EE; }
+    input.disc {
+      width: 52px; padding: 5px 6px; border: 1.5px solid #ccd;
+      border-radius: 6px; text-align: center; font-size: 13px;
+    }
+    input.disc:focus { outline: none; border-color: #3333EE; }
+
+    .mono { font-family: monospace; }
+    .row-total { font-weight: 700; color: #3333EE; font-family: monospace; }
+
+    /* ── Summary ── */
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .sbox { background: #f7f7ff; border-radius: 9px; padding: 18px 20px; }
+    .sbox.green { background: #f0fff4; }
+    .srow { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #e8e8f0; font-size: 13.5px; }
+    .srow:last-child { border: none; font-size: 16px; font-weight: 800; color: #3333EE; padding-top: 12px; }
+    .slabel { color: #555; }
+    .sval { font-family: monospace; font-weight: 600; }
+    .sval.red { color: #c0392b; }
+
+    /* ── Leasing ── */
+    .leasing-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 24px; }
+    .lcard {
+      border: 2px solid #ddd; border-radius: 10px; padding: 18px 16px;
+      cursor: pointer; transition: border-color .18s, background .18s;
+    }
+    .lcard:hover { border-color: #3333EE; background: #f8f8ff; }
+    .lcard.active { border-color: #3333EE; background: #eef; }
+    .lcard h3 { font-size: 13.5px; font-weight: 700; color: #1a1a2e; margin: 6px 0 6px; }
+    .lcard p  { font-size: 11.5px; color: #666; line-height: 1.55; }
+    .lbadge {
+      display: inline-block; color: white; font-size: 10px;
+      padding: 2px 9px; border-radius: 20px; font-weight: 700;
+    }
+    .lbadge.blue   { background: #3333EE; }
+    .lbadge.orange { background: #e67e22; }
+    .lbadge.green  { background: #27ae60; }
+
+    .duration-row { display: flex; align-items: center; gap: 14px; margin-top: 10px; }
+    .duration-row label { font-size: 14px; font-weight: 600; color: #444; white-space: nowrap; }
+    input[type=range] { flex:1; height: 6px; accent-color: #3333EE; }
+    .dur-bubble {
+      min-width: 72px; text-align: center;
+      font-size: 24px; font-weight: 800; color: #3333EE;
+    }
+
+    .result-bar {
+      margin-top: 20px;
+      background: linear-gradient(135deg,#2222cc,#4455ff);
+      color: white; border-radius: 12px; padding: 22px 28px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .result-bar .rlabel { font-size: 12.5px; opacity: .85; margin-bottom: 4px; }
+    .result-bar .rbig  { font-size: 34px; font-weight: 800; }
+    .result-bar .rsub  { font-size: 11.5px; opacity: .75; margin-top: 4px; }
+    .result-bar .rright { text-align: right; }
+    .result-bar .rmed  { font-size: 20px; font-weight: 700; }
+
+    .rate-note { font-size: 11px; color: #999; margin-top: 10px; line-height: 1.5; }
+
+    /* ── Footer ── */
+    .footer { text-align: center; padding: 18px; color: #bbb; font-size: 11.5px; }
+
+    @media print {
+      body { background: white; }
+      .btn-print { display: none; }
+      .header { border-bottom: 3px solid #3333EE; box-shadow: none; }
+      .card { box-shadow: none; border: 1px solid #ddd; }
+      .container { margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════ HEADER ════════════ -->
+<div class="header">
+  <div class="header-left">
+    <!-- PocketHome Logo (SVG recreation) -->
+    <svg width="58" height="58" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <!-- Outer house frame: thick house outline -->
+      <!-- Left wall -->
+      <polygon points="8,48 8,94 28,94 28,55" fill="#3333EE"/>
+      <!-- Right wall -->
+      <polygon points="92,48 92,94 72,94 72,55" fill="#3333EE"/>
+      <!-- Bottom bar -->
+      <rect x="8" y="78" width="84" height="16" fill="#3333EE"/>
+      <!-- Roof: two thick diagonal arms meeting at apex -->
+      <polygon points="50,4 92,44 78,44 50,20 22,44 8,44" fill="#3333EE"/>
+      <!-- Inner cutout to form house "frame" -->
+      <polygon points="50,21 78,46 78,78 22,78 22,46" fill="white"/>
+      <!-- P letterform inside -->
+      <!-- P stem -->
+      <rect x="30" y="50" width="11" height="28" fill="#3333EE"/>
+      <!-- P top bar -->
+      <rect x="30" y="50" width="26" height="9" fill="#3333EE"/>
+      <!-- P middle bar -->
+      <rect x="30" y="64" width="26" height="9" fill="#3333EE"/>
+      <!-- P right side -->
+      <rect x="51" y="50" width="5" height="23" fill="#3333EE"/>
+      <!-- Small house/window inside P bowl -->
+      <polygon points="43,54 50,58 50,63 36,63 36,58" fill="white"/>
+      <polygon points="43,50 50,55 36,55" fill="white"/>
+    </svg>
+    <div>
+      <div class="company-name">PocketHome</div>
+      <div class="company-sub">Έντυπο παραγγελίας για: <strong>Realis Real Estate Investments IKE</strong></div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="doc-title">Έντυπο Παραγγελίας Επίπλων</div>
+    <div class="doc-meta">Πελάτης: <strong>Realis Real Estate Investments IKE</strong></div>
+    <div class="doc-meta" style="margin-top:2px">Προμηθευτής: <strong>Dromeas</strong> &nbsp;|&nbsp; <span id="doc-date"></span></div>
+    <div class="doc-meta" style="margin-top:2px">Κωδ. Προσφοράς: ΠΡΦ-ΘΚ-19988 / 19989</div>
+    <button class="btn-print" onclick="window.print()">🖨 Εκτύπωση</button>
+  </div>
+</div>
+
+<!-- ════════════ CONTAINER ════════════ -->
+<div class="container">
+
+  <!-- Products -->
+  <div class="card">
+    <div class="card-title">📦 Επιλογή Προϊόντων &amp; Ποσοτήτων</div>
+    <table class="tbl" id="prod-tbl">
+      <thead>
+        <tr>
+          <th style="width:34%">Προϊόν</th>
+          <th>Τεμάχια</th>
+          <th>Τιμή / Τεμ (€)<br><small style="font-weight:400;opacity:.8">πριν έκπτωση</small></th>
+          <th>Έκπτωση %</th>
+          <th>Αξία μετά<br>έκπτωση</th>
+          <th>ΦΠΑ 24%</th>
+          <th>Σύνολο γραμμής (€)</th>
+        </tr>
+      </thead>
+      <tbody id="prod-body"></tbody>
+    </table>
+  </div>
+
+  <!-- Summary -->
+  <div class="card">
+    <div class="card-title">🧾 Σύνοψη Παραγγελίας</div>
+    <div class="summary-grid">
+      <div class="sbox">
+        <div class="srow"><span class="slabel">Αξία πριν έκπτωση</span>    <span class="sval" id="s-gross">€0,00</span></div>
+        <div class="srow"><span class="slabel">Αξία έκπτωσης</span>         <span class="sval red" id="s-disc">−€0,00</span></div>
+        <div class="srow"><span class="slabel">Καθαρή αξία</span>           <span class="sval" id="s-net">€0,00</span></div>
+        <div class="srow"><span class="slabel">ΦΠΑ 24%</span>               <span class="sval" id="s-vat">€0,00</span></div>
+        <div class="srow"><span class="slabel">ΣΥΝΟΛΟ ΠΑΡΑΓΓΕΛΙΑΣ</span>    <span class="sval" id="s-total">€0,00</span></div>
+      </div>
+      <div class="sbox green">
+        <div style="font-size:12.5px;color:#555;font-weight:700;margin-bottom:10px">📋 Στοιχεία Παράδοσης</div>
+        <div class="srow"><span class="slabel">Τόπος παράδοσης</span>       <span>Βαρυμπόμπη Αττικής</span></div>
+        <div class="srow"><span class="slabel">Χρόνος παράδοσης</span>      <span>~4 εβδομάδες</span></div>
+        <div class="srow"><span class="slabel">Μεταφορά &amp; Εγκατάσταση</span><span style="color:#27ae60;font-weight:700">Δωρεάν</span></div>
+        <div class="srow"><span class="slabel">Εγγύηση προϊόντων</span>     <span>5 έτη</span></div>
+        <div class="srow"><span class="slabel">Ισχύς προσφοράς</span>       <span>30 ημέρες</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leasing -->
+  <div class="card">
+    <div class="card-title">💳 Σενάρια Χρηματοδότησης</div>
+
+    <div class="leasing-cards">
+      <div class="lcard active" id="lc-finance" onclick="pickLeasing('finance')">
+        <span class="lbadge blue">Χρηματοδοτική</span>
+        <h3>Leasing με Μεταβίβαση</h3>
+        <p>Το πάγιο μεταβιβάζεται στον μισθωτή στη λήξη. Εγγράφεται στα βιβλία ως πάγιο, αποσβένεται κανονικά.</p>
+      </div>
+      <div class="lcard" id="lc-operating" onclick="pickLeasing('operating')">
+        <span class="lbadge orange">Λειτουργική</span>
+        <h3>Leasing Χωρίς Μεταβίβαση</h3>
+        <p>Το πάγιο παραμένει στη μισθώτρια εταιρεία. Πλήρης έκπτωση δόσεων ως λειτουργικό κόστος.</p>
+      </div>
+      <div class="lcard" id="lc-cash" onclick="pickLeasing('cash')">
+        <span class="lbadge green">Εφάπαξ</span>
+        <h3>Άμεση Αγορά (Μετρητά)</h3>
+        <p>Προκαταβολή + εξόφληση με τραπεζική κατάθεση εντός 7 ημερών από έκδοση τιμολογίου.</p>
+      </div>
+    </div>
+
+    <!-- Slider -->
+    <div id="slider-section">
+      <label style="font-size:14px;font-weight:700;color:#333">
+        Διάρκεια χρηματοδότησης:
+        <span id="dur-label" style="color:#3333EE">12 μήνες</span>
+      </label>
+      <div class="duration-row">
+        <span style="font-size:12px;color:#999">1 μήνας</span>
+        <input type="range" id="dur-slider" min="1" max="24" value="12" oninput="updateLeasing()">
+        <span style="font-size:12px;color:#999">24 μήνες</span>
+        <div class="dur-bubble"><span id="dur-val">12</span>μ</div>
+      </div>
+    </div>
+
+    <!-- Result bar -->
+    <div class="result-bar" id="result-bar">
+      <div>
+        <div class="rlabel" id="r-mode">Χρηματοδοτική μίσθωση με μεταβίβαση</div>
+        <div class="rbig" id="r-monthly">€0,00</div>
+        <div class="rsub">μηνιαία δόση (με ΦΠΑ)</div>
+      </div>
+      <div class="rright">
+        <div class="rlabel">Συνολικό κόστος χρηματοδότησης</div>
+        <div class="rmed" id="r-total-cost">€0,00</div>
+        <div class="rsub" id="r-interest">Τόκοι: €0,00 &nbsp;|&nbsp; Επιτόκιο 10% ετήσιο</div>
+      </div>
+    </div>
+
+    <div class="rate-note">
+      * Το επιτόκιο 10% είναι ενδεικτικό. Οι δόσεις υπολογίζονται με τη μέθοδο ισόποσης αποπληρωμής (annuity).
+      Η τελική έγκριση εξαρτάται από τη χρηματοδοτική εταιρεία.
+      Το χρηματοδοτούμενο ποσό περιλαμβάνει ΦΠΑ.
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  PocketHome &nbsp;|&nbsp; Έντυπο παραγγελίας για Realis Real Estate Investments IKE &nbsp;|&nbsp; Προμηθευτής: Dromeas – www.dromeas.gr
+</div>
+
+<script>
+// ── Product catalogue ──────────────────────────────────────────
+const PRODUCTS = [
+  { id:1, code:'634-072-607',
+    name:'Γραφείο NEO Τριάδα 140×80cm', tag:'140cm',
+    desc:'4200×800×730H, Μελαμίνη Υπόλευκο, Μέταλλο Υπόλευκο',
+    price:440.00, disc:25 },
+  { id:2, code:'634-073-607',
+    name:'Γραφείο NEO Τριάδα 120×80cm', tag:'120cm',
+    desc:'3600×800×730H, Μελαμίνη Υπόλευκο, Μέταλλο Υπόλευκο',
+    price:403.00, disc:25 },
+  { id:3, code:'ACGR-M040-011-AN1-00',
+    name:'Ορθογώνια Ροζέτα Αλουμινίου', tag:'',
+    desc:'Διάσταση 400×110mm, Χρώμα Φυσική Ανοδίωση',
+    price:36.00, disc:25 },
+  { id:4, code:'ACCT-ALL-14-00-F06-00',
+    name:'Αρθρωτό Κανάλι Καλωδίων 140cm', tag:'140cm',
+    desc:'Μήκος 1400/1000×140mm, Χρώμα Μέταλλο Υπόλευκο',
+    price:26.00, disc:25 },
+  { id:5, code:'ACCT-ALL-12-00-F06-00',
+    name:'Αρθρωτό Κανάλι Καλωδίων 120cm', tag:'120cm',
+    desc:'Μήκος 1200/800×140mm, Χρώμα Μέταλλο Υπόλευκο',
+    price:24.00, disc:25 },
+  { id:6, code:'TETR-FPW-NEO0-125-035-305-00',
+    name:'TETRA Διαχωριστικό 140cm', tag:'140cm',
+    desc:'Μπροστινό Επικαθήμενο, 1255×350×30mm, Ύφασμα Τύπος 3',
+    price:78.00, disc:25 },
+  { id:7, code:'TETR-FPW-NEO0-105-035-305-00',
+    name:'TETRA Διαχωριστικό 120cm', tag:'120cm',
+    desc:'Μπροστινό Επικαθήμενο, 1055×350×30mm, Ύφασμα Τύπος 3',
+    price:72.00, disc:25 },
+  { id:8, code:'ACMR-P03-00',
+    name:'Μαγνητικός Δακτύλιος Καλωδίων', tag:'',
+    desc:'Χρώμα Υπόλευκο',
+    price:7.00, disc:25 },
+];
+
+// ── Helpers ────────────────────────────────────────────────────
+function fmt(n) {
+  if (isNaN(n)) return '€0,00';
+  return '€' + n.toFixed(2)
+    .replace('.', '##DEC##')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    .replace('##DEC##', ',');
+}
+function parseEuro(s) {
+  return parseFloat((s||'0').replace('€','').replace(/\./g,'').replace(',','.')) || 0;
+}
+
+// ── Build table ────────────────────────────────────────────────
+function buildTable() {
+  const tbody = document.getElementById('prod-body');
+  PRODUCTS.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.id = 'tr-' + p.id;
+    const tagHtml = p.tag ? `<span class="tag">${p.tag}</span>` : '';
+    tr.innerHTML = `
+      <td>
+        <div class="pname">${p.name}${tagHtml}</div>
+        <div class="pcode">${p.code}</div>
+        <div class="pdesc">${p.desc}</div>
+      </td>
+      <td><input class="qty" type="number" id="qty-${p.id}" value="0" min="0" max="9999" oninput="recalc()"></td>
+      <td class="mono">${fmt(p.price)}</td>
+      <td>
+        <input class="disc" type="number" id="disc-${p.id}" value="${p.disc}" min="0" max="100" oninput="recalc()">%
+      </td>
+      <td class="mono" id="net-${p.id}">€0,00</td>
+      <td class="mono" id="vat-${p.id}">€0,00</td>
+      <td class="row-total" id="tot-${p.id}">€0,00</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── Recalculate ────────────────────────────────────────────────
+function recalc() {
+  let tGross=0, tDisc=0, tNet=0, tVat=0, tTotal=0;
+  PRODUCTS.forEach(p => {
+    const qty  = parseFloat(document.getElementById('qty-'+p.id).value)  || 0;
+    const disc = parseFloat(document.getElementById('disc-'+p.id).value) || 0;
+    const gross   = qty * p.price;
+    const discAmt = gross * disc / 100;
+    const net     = gross - discAmt;
+    const vat     = net * 0.24;
+    const total   = net + vat;
+    document.getElementById('net-'+p.id).textContent = fmt(net);
+    document.getElementById('vat-'+p.id).textContent = fmt(vat);
+    document.getElementById('tot-'+p.id).textContent = fmt(total);
+    document.getElementById('tr-'+p.id).className = qty === 0 ? 'zero' : '';
+    tGross += gross; tDisc += discAmt; tNet += net; tVat += vat; tTotal += total;
+  });
+  document.getElementById('s-gross').textContent = fmt(tGross);
+  document.getElementById('s-disc').textContent  = '−' + fmt(tDisc);
+  document.getElementById('s-net').textContent   = fmt(tNet);
+  document.getElementById('s-vat').textContent   = fmt(tVat);
+  document.getElementById('s-total').textContent = fmt(tTotal);
+  updateLeasing();
+}
+
+// ── Leasing ────────────────────────────────────────────────────
+let leasingType = 'finance';
+
+function pickLeasing(type) {
+  leasingType = type;
+  ['finance','operating','cash'].forEach(t => {
+    document.getElementById('lc-'+t).classList.toggle('active', t === type);
+  });
+  const isCash = type === 'cash';
+  document.getElementById('slider-section').style.display = isCash ? 'none' : 'block';
+  updateLeasing();
+}
+
+function updateLeasing() {
+  const months  = parseInt(document.getElementById('dur-slider').value);
+  document.getElementById('dur-val').textContent   = months;
+  document.getElementById('dur-label').textContent = months + ' μήν' + (months===1?'ας':'ες');
+
+  const principal = parseEuro(document.getElementById('s-total').textContent);
+  const bar = document.getElementById('result-bar');
+
+  if (leasingType === 'cash') {
+    document.getElementById('r-mode').textContent    = 'Εφάπαξ πληρωμή';
+    document.getElementById('r-monthly').textContent = fmt(principal);
+    document.getElementById('r-total-cost').textContent = fmt(principal);
+    document.getElementById('r-interest').textContent   = 'Χωρίς επιτόκιο';
+    bar.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
+    return;
+  }
+
+  if (leasingType === 'finance') {
+    bar.style.background = 'linear-gradient(135deg,#2222cc,#4455ff)';
+    document.getElementById('r-mode').textContent = 'Χρηματοδοτική μίσθωση με μεταβίβαση παγίου';
+  } else {
+    bar.style.background = 'linear-gradient(135deg,#b84a00,#e67e22)';
+    document.getElementById('r-mode').textContent = 'Λειτουργική μίσθωση χωρίς μεταβίβαση παγίου';
+  }
+
+  let monthly = 0, totalCost = 0, interest = 0;
+  if (principal > 0) {
+    const r = 0.10 / 12;                        // monthly rate
+    if (months === 1) {
+      monthly = principal * (1 + r);
+    } else {
+      monthly = principal * r * Math.pow(1+r, months) / (Math.pow(1+r, months) - 1);
+    }
+    totalCost = monthly * months;
+    interest  = totalCost - principal;
+  }
+
+  document.getElementById('r-monthly').textContent   = fmt(monthly);
+  document.getElementById('r-total-cost').textContent= fmt(totalCost);
+  document.getElementById('r-interest').textContent  = 'Τόκοι: ' + fmt(interest) + '  |  Επιτόκιο 10% ετήσιο';
+}
+
+// ── Init ───────────────────────────────────────────────────────
+document.getElementById('doc-date').textContent =
+  new Date().toLocaleDateString('el-GR',{day:'2-digit',month:'long',year:'numeric'});
+
+buildTable();
+recalc();
+</script>
+</body>
+</html>
